@@ -73,7 +73,7 @@ export default {
 				ref: `heads/${headName}`,
 				sha: newCommit.data.sha,
 			});
-			await octokit.rest.pulls.create({
+			const pullReq = await octokit.rest.pulls.create({
 				owner: 'BetterSEQTA',
 				repo: 'BetterSEQTA-Themes',
 				title: `Add new theme from user ${interactionUser.user.username}`,
@@ -81,7 +81,7 @@ export default {
 				base: 'main',
 				body: `This pull request was automatically created by the BetterSEQTA+ Bot on behalf of ${interactionUser.user.username}, who has the User ID of ${interaction.user.id} on ${new Date().toISOString()}.`,
 			});
-			interaction.editReply(`Submitted theme as pull request`);
+			interaction.editReply(`Submitted theme as pull request. See it here: ${pullReq.data.html_url}`);
 	    	}
 	    else {
 	    	interaction.reply('Please provide a valid JSON file.');
