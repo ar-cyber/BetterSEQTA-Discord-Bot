@@ -16,7 +16,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('submit')
         .setDescription('Submit a custom theme to GitHub.')
-	.addAttachmentOption(option => option.setName('input').setDescription('The theme file to submit.').setRequired(true)),
+	.addAttachmentOption(option => option.setName('input').setDescription('The theme file to submit (in the BetterSEQTA+ exported format).').setRequired(true)),
     async execute(interaction) {
 	    if (interaction.member.roles.cache.some(role => role.name === 'Theme Submitter') && interaction.channel.id === "1239895139959443486") {
 	    	const interactionUser = await interaction.guild.members.fetch(interaction.user.id)
