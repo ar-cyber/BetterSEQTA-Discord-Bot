@@ -14,17 +14,20 @@ export default {
 			interaction.deferReply();
 			const jsonFile = await fetch(attachment.url).then(response => response.json());
 			const headName = `${interaction.user.id}-${crypto.randomBytes(10).toString('hex')}`;
+			// Grab the branch reference of the main branch which we will use as the base for the new branch.
 			const mainRef = await octokit.rest.git.getRef({
   				owner: 'BetterSEQTA',
   				repo: 'BetterSEQTA-Themes',
   				ref: 'heads/main',
 			});
+			// Make the new branch with the Discord ID of the submitting user combined with a random hex string of 10 bytes.
 	    		await octokit.rest.git.createRef({
 				owner: 'BetterSEQTA',
   				repo: 'BetterSEQTA-Themes',
   				ref: `refs/heads/${headName}`,
   				sha: mainRef.data.object.sha,
 	    		});
+			// Create a new tree with the new theme file.
 			const newTree = await octokit.rest.git.createTree({
 				owner: 'BetterSEQTA',
 				repo: 'BetterSEQTA-Themes',
@@ -38,6 +41,7 @@ export default {
 					},
 				],
 			});
+			// Create a new commit with the new tree.
 			const newCommit = await octokit.rest.git.createCommit({
 				owner: 'BetterSEQTA',
 				repo: 'BetterSEQTA-Themes',
@@ -56,12 +60,14 @@ export default {
 				}
 
 			});
+			// Update the new branch with the new commit.
 			await octokit.rest.git.updateRef({
 				owner: 'BetterSEQTA',
 				repo: 'BetterSEQTA-Themes',
 				ref: `heads/${headName}`,
 				sha: newCommit.data.sha,
 			});
+			// Create the pull request with the new branch into the main branch.
 			const pullReq = await octokit.rest.pulls.create({
 				owner: 'BetterSEQTA',
 				repo: 'BetterSEQTA-Themes',
