@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { octokit } from '../../functions/createOctokit.js';
 export default {
     data: new SlashCommandBuilder()
-        .setName('submit')
+        .setName('submit-theme')
         .setDescription('Submit a custom theme to GitHub.')
 	.addAttachmentOption(option => option.setName('file').setDescription('The theme file to submit (in the BetterSEQTA+ exported format).').setRequired(true)),
     async execute(interaction) {
