@@ -6,6 +6,7 @@ import 'dotenv/config';
 const token = process.env.DISCORD_TOKEN
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+
 const __dirname = fileURLToPath(dirname(import.meta.url));
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
@@ -54,3 +55,10 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
+/*
+Future polling
+while (true) {
+	console.log('yo')
+	await new Promise(resolve => setTimeout(resolve, 5000));
+}
+*/
