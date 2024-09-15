@@ -4,12 +4,15 @@ import fs from 'node:fs'
 import path from 'node:path'
 import 'dotenv/config';
 const token = process.env.DISCORD_TOKEN
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = fileURLToPath(dirname(import.meta.url));
+const isWin = process.platform === "win32";
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
+import * as url from 'url';
+
+
+const __dirname = (url.fileURLToPath(new URL('.', import.meta.url)));
+
+export const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessages] });
 
 client.commands = new Collection()
 
@@ -21,7 +24,12 @@ for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
-		const command = import(filePath);
+		let command = ''
+		if (isWin === true) {
+			command = import('file:///' + filePath);
+		} else {
+			command = import(filePath);
+		}
 		const commandresult = command.then((result) => {
 			if (result.default.data && result.default.execute) {
 
@@ -42,7 +50,12 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 
 for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
-	const event = import(filePath);
+	let event = '';
+	if (isWin === true) {
+		event = import('file:///' + filePath);
+	} else {
+		event = import(filePath);
+	}
 	event.then((result) => {
 
 		if (result.default.once) {
@@ -55,10 +68,3 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
-/*
-Future polling
-while (true) {
-	console.log('yo')
-	await new Promise(resolve => setTimeout(resolve, 5000));
-}
-*/
