@@ -1,9 +1,1 @@
-# The official BetterSEQTA+ Discord bot!
-
-Includes support for:
-
-    - Creating new themes
-    - Seeing which theme requests you have made
-    - Not much else
-    
-Made by Crazypersonalph
+## PLEASE MOVE TO THE `PYTHON-DEV` BRANCH TO SEE PROGRESS IN THIS REPO
